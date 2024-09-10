@@ -13,7 +13,7 @@
 
 3. Melakukan routing pada proyek agar dapat menjalankan aplikasi main.
 > Saya membuka file settings.py pada direktori proyek utama (dairy_products_ecommerce) dan menambahkan 'main' ke dalam daftar INSTALLED_APPS untuk memberitahu Django bahwa aplikasi ini aktif.
-> Saya membuka file urls.py pada direktori proyek utama dan menambahkan rute untuk aplikasi main dengan cara path('', include('main.urls')), agar aplikasi ini bisa diakses melalui URL.
+> Saya membuka file urls.py pada direktori proyek utama dan menambahkan rute untuk aplikasi main dengan cara path('main/', include('main.urls')), agar aplikasi ini bisa diakses melalui URL.
 
 4. Membuat model pada aplikasi main dengan nama Product dan memiliki atribut wajib sebagai berikut. (name, price, description)
 > Saya membuka file models.py pada aplikasi main.
@@ -26,8 +26,8 @@
 > Di dalam fungsi ini, saya menggunakan render untuk menampilkan template dengan data yang dikirimkan.
 
 6. Membuat sebuah routing pada urls.py aplikasi main untuk memetakan fungsi yang telah dibuat pada views.py.
-> Saya membuat file urls.py di dalam folder aplikasi main jika belum ada.
-> Saya menambahkan rute baru dengan path('', views.show_main) untuk menghubungkan URL ke fungsi show_main yang telah dibuat di views.py.
+> Saya membuat file urls.py di dalam folder aplikasi main.
+> Saya menambahkan rute baru dengan path('', show_main, name='show_main') untuk menghubungkan URL ke fungsi show_main yang telah dibuat di views.py.
 
 7. Melakukan deployment ke PWS terhadap aplikasi yang sudah dibuat sehingga nantinya dapat diakses oleh teman-temanmu melalui Internet.
 > Setelah semua bagian selesai, saya membuka terminal dan melakukan commit semua perubahan ke Git.
