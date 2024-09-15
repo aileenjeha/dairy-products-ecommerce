@@ -1,5 +1,99 @@
 - Link Aplikasi PWS : https://aileen-josephine-dairyproductsecommerce.pbp.cs.ui.ac.id 
 
+## Tugas 3
+
+#### Jelaskan mengapa kita memerlukan data delivery dalam pengimplementasian sebuah platform
+
+Data delivery penting dalam pengimplementasian sebuah aplikasi karena memungkinkan transfer data antara server dan client secara efisien. Hal ini memastikan aplikasi dapat memberikan response yang sesuai terhadap permintaan pengguna seperti mengirim data dari server ke browser (client) untuk menampilkan informasi atau menerima data input dari pengguna untuk diproses.
+
+#### Menurutmu, mana yang lebih baik antara XML dan JSON? Mengapa JSON lebih populer dibandingkan XML?
+
+Menurut saya, JSON lebih baik karena lebih muda dibaca dan ditulis serta ukuran filenya yang lebih kecil. Namun, sepertinya browser tidak dapat menampilkan JSON yang diformat dengan baik, sedangkan XML bisa. Walaupun demikian, JSON tetap lebih unggul karena syntaxnya yang lebih mirip dengan bahasa pemrograman, misalnya Java atau Javascript, dibandingkan dengan syntax XML yang mirip seperti HTML.
+
+#### Jelaskan fungsi dari method is_valid() pada form Django dan mengapa kita membutuhkan method tersebut?
+Method is_valid() pada form Django digunakan untuk memeriksa apakah data yang dikirimkan dalam form sudah valid yang telah ditentukan. Fungsi ini sangat penting karena is_valid() memastikan bahwa data yang diinput sesuai dengan aturan yang telah ditentukan, seperti format email yang benar, panjang teks, input berupa angka, atau apakah suatu field wajib diisi. Dengan memvalidasi data, kita juga dapat mencegah data yang tidak diinginkan.
+
+Jika is_valid() mereturn False, maka form tersebut dianggap tidak valid dan kita bisa memberikan error message kepada pengguna.
+
+#### Mengapa kita membutuhkan csrf_token saat membuat form di Django? Apa yang dapat terjadi jika kita tidak menambahkan csrf_token pada form Django? Bagaimana hal tersebut dapat dimanfaatkan oleh penyerang?
+
+csrf_token dibutuhkan untuk mencegah serangan Cross-Site Request Forgery (CSRF). Jika kita tidak menggunakan csrf_token, maka aplikasi kita bisa rentan terhadap serangan CSRF. Hacker bisa membuat halaman berbahaya yang menyertakan form tersembunyi dan ketika pengguna mengunjungi halaman tersebut, form tersebut secara otomatis dikirimkan ke server aplikasi web target, lalu menyebabkan perubahan yang tidak sah pada data pengguna. 
+
+####  Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+
+1. Membuat input form untuk menambahkan objek model pada app sebelumnya.
+- Saya pertama-tama menambahkan /templates dan base.html untuk membuat base HTML
+- Kemudian, saya membuat create_product.html untuk membuat form dan juga memodifikasi main.html untuk menginclude form tersebut
+- Lalu, saya membuat forms.py dan membuat Class agar form tesebut bisa menerima dan menyimpan datanya
+- Saya juga memodifikasi models.py saya agar memiliki id
+- Kemudian, saya memodifikasi views.py agak bisa menerima POST Request dari form yang barusan saya buat, sekaligus juga agar bisa menampilkan main.html
+
+2. Tambahkan 4 fungsi views baru untuk melihat objek yang sudah ditambahkan dalam format XML, JSON, XML by ID, dan JSON by ID.
+
+- Saya menambahkan 4 fungsi berikut pada views.py
+
+```python
+# mengembalikan data dalam bentuk xml
+def show_xml(request):
+    data = Product.objects.all()
+    return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+
+# mengembalikan data dalam bentuk json
+def show_json(request):
+    data = Product.objects.all()
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+# mengembalikan data dalam bentuk xml, mengambilnya berdasarkan id
+def show_xml_by_id(request, id):
+    data = Product.objects.filter(pk=id)
+    return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+
+# mengembalikan data dalam bentuk json, mengambilnya berdasarkan id
+def show_json_by_id(request, id):
+    data = Product.objects.filter(pk=id)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+```
+
+3. Membuat routing URL untuk masing-masing views yang telah ditambahkan pada poin 2.
+
+- Saya menambahkan routing pada urls.py seperti berikut:
+
+```python
+from django.urls import path
+from main.views import show_main, create_product, show_xml, show_json, show_xml_by_id, show_json_by_id
+
+app_name = 'main'
+
+urlpatterns = [
+    path('', show_main, name='show_main'),
+    path('create-product', create_product, name='create_product'),
+    
+    path('xml/', show_xml, name='show_xml'),
+    path('json/', show_json, name='show_json'),
+    path('xml/<str:id>/', show_xml_by_id, name='show_xml_by_id'),
+    path('json/<str:id>/', show_json_by_id, name='show_json_by_id'),
+]
+```
+
+### Sceenshots
+#### `/xml`
+
+![Alt text](image.png)
+
+#### `/json`
+
+![Alt text](image-1.png)
+
+#### `/xml/<id>`
+
+![Alt text](image-2.png)
+
+#### `/json/<id>`
+
+![Alt text](image-3.png)
+
+
+## Tugas 2
 - Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
 
 1.  Membuat sebuah proyek Django baru.

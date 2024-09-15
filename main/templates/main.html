@@ -1,6 +1,41 @@
-<h1>Dairy Products E-commerce</h1>
+ {% extends 'base.html' %}
+ {% block content %}
+ <h1>Dairy Products E-commerce</h1>
 
-<h5>Nama: </h5>
-<p>Aileen Josephine Halim</p> 
-<h5>NPM: </h5>
-<p>2306165761</p> 
+ <h5>Nama: </h5>
+ <p>Aileen Josephine Halim</p> 
+ <h5>NPM: </h5>
+ <p>2306165761</p>  
+
+ {% if not products %}
+<p>Belum ada product!</p>
+{% else %}
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Price</th>
+    <th>Description</th>
+    <th>Fat Content</th>
+    <th>Quantity</th>
+    <th>Rating</th>
+  </tr>
+
+  {% for product in products %}
+  <tr>
+    <td>{{product.name}}</td>
+    <td>{{product.price}}</td>
+    <td>{{product.description}}</td>
+    <td>{{product.fat_content}}</td>
+    <td>{{product.quantity}}</td>
+    <td>{{product.rating}}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+
+<br />
+
+<a href="{% url 'main:create_product' %}">
+    <button>Add New Product</button>
+</a>
+ {% endblock content %}
