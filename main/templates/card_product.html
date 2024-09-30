@@ -1,0 +1,61 @@
+{% load static %}
+<div class="px-[40px]">
+    <div class="w-[380px] h-auto flex-col justify-start items-end inline-flex"> 
+        <div class="self-stretch pb-6 bg-gradient-to-l from-[#ffd3f2] to-[#cef6ff] rounded-3xl border border-[#dedede] flex-col justify-start items-start gap-6 flex">
+            <div class="self-stretch p-6 bg-white rounded-tl-3xl rounded-tr-3xl border border-[#dedede] justify-start items-center inline-flex">
+                <div class="grow shrink basis-0 text-[#4ab2c9] text-2xl font-bold font-sans">
+                    {{ product.name }}
+                </div>
+                <div class="px-6 py-2.5 bg-gradient-to-r from-[#73daf1] to-[#eb7acb] rounded-[40px] justify-center items-center gap-2.5 flex">
+                    <div class="text-white text-xl font-bold font-sans">
+                        {{ product.price }}
+                    </div>
+                </div>
+            </div>
+            <div class="self-stretch grow shrink basis-0 px-6 justify-start items-start gap-2.5 inline-flex">
+                <div class="grow shrink basis-0 text-black text-xl font-normal font-sans">
+                    {{ product.description }}
+                </div>
+            </div>
+            <div class="self-stretch h-auto px-6 flex-col justify-start items-start gap-2 flex">
+                <div class="justify-start items-center gap-2 inline-flex">
+                    <div class="w-6 h-6 relative">
+                        <img src="{% static 'image/fat.svg' %}" class="w-6 h-6" alt="Fat Icon"/>
+                    </div>
+                    <div class="text-black text-xl font-normal font-sans">
+                        Fat - {{ product.fat_content }}
+                    </div>
+                </div>
+                <div class="justify-start items-center gap-2 inline-flex">
+                    <div class="w-6 h-6 relative">
+                        <img src="{% static 'image/information.svg' %}" class="w-6 h-6" alt="Quantity Icon"/>
+                    </div>
+                    <div class="text-black text-xl font-normal font-sans">
+                        Quantity - {{ product.quantity }}
+                    </div>
+                </div>
+                <div class="self-stretch justify-start items-center gap-2 inline-flex">
+                    <div class="w-6 h-6 relative">
+                        <img src="{% static 'image/star.svg' %}" class="w-6 h-6" alt="Rating Icon"/>
+                    </div>
+                    <div class="text-black text-xl font-normal font-sans">
+                        Rating - {{ product.rating }}
+                    </div>
+                </div>
+                <div class="w-full"></div> 
+            </div>
+        </div>
+        <div class="h-[65.50px] px-6 justify-end items-center gap-3 inline-flex">
+            <div class="w-[64.50px] h-[65.50px] relative">
+                <a href="{% url 'main:edit_product' product.pk %}" class="group">
+                    <img src="{% static 'image/edit.svg' %}" class="w-20 h-20 top-[-50px] absolute transition-transform duration-300 ease-in-out group-hover:scale-110" />
+                </a>
+            </div>
+            <div class="w-[64.50px] h-[65.50px] relative">
+                <a href="{% url 'main:delete_product' product.pk %}" class="group">
+                    <img src="{% static 'image/delete.svg' %}" class="w-20 h-20 top-[-50px] absolute transition-transform duration-300 ease-in-out group-hover:scale-110" />
+                </a>
+            </div>            
+        </div>       
+    </div>
+</div>

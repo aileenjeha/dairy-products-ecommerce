@@ -1,5 +1,71 @@
 - Link Aplikasi PWS : https://aileen-josephine-dairyproductsecommerce.pbp.cs.ui.ac.id 
 
+## Tugas 5
+
+#### Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut!
+
+Dalam CSS, urutan prioritas pengambilan selector atau spesifisitas adalah penting untuk menentukan gaya mana yang diterapkan pada elemen HTML ketika terdapat beberapa aturan yang mungkin bertentangan. Urutan prioritasnya adalah sebagai berikut:
+1. Inline styles: Gaya yang ditetapkan langsung pada elemen HTML menggunakan atribut style.
+2. ID selector: Selector yang menggunakan ID (misalnya, #example).
+3. Class selector, attribute selector, dan pseudo-classes: Selector ini mencakup class (misalnya, .example), atribut (misalnya, [type="text"]), dan pseudo-classes (misalnya, :hover).
+4. Element selector dan pseudo-elements: Selector ini mencakup nama elemen (misalnya, div, p) dan pseudo-elements (misalnya, ::before, ::after).
+5. Universal selector: Selector ini menggunakan asterisk * yang menargetkan semua elemen.
+Jika terdapat aturan yang memiliki spesifisitas yang sama, aturan yang muncul terakhir dalam file CSS akan diambil.
+
+#### Mengapa responsive design menjadi konsep yang penting dalam pengembangan aplikasi web? Berikan contoh aplikasi yang sudah dan belum menerapkan responsive design!
+
+Responsive design adalah konsep yang penting dalam pengembangan aplikasi web karena ia memastikan bahwa tampilan dan fungsionalitas suatu situs web dapat beradaptasi dengan berbagai ukuran layar dan perangkat. Ini sangat penting mengingat semakin banyaknya pengguna yang mengakses internet melalui perangkat mobile. Dengan responsive design, pengalaman pengguna menjadi lebih baik, karena konten tetap mudah diakses dan dibaca tanpa harus melakukan zoom in atau scroll horizontal. Contoh aplikasi yang sudah menerapkan responsive design adalah Twitter, yang menawarkan pengalaman pengguna yang konsisten di desktop dan perangkat mobile. Sebaliknya, situs web yang tidak responsif, seperti irishwrecksonline.net, mungkin hanya terlihat baik di layar desktop tetapi masih tidak responsif.
+
+#### Jelaskan perbedaan antara margin, border, dan padding, serta cara untuk mengimplementasikan ketiga hal tersebut!
+
+- Margin adalah ruang di luar elemen yang memisahkannya dari elemen lain. Ini tidak mempengaruhi ukuran elemen, dan dapat diatur menggunakan properti margin. 
+- Border adalah garis yang mengelilingi elemen dan membentuk batas antara margin dan padding. Kita dapat mengatur ketebalan, gaya, dan warna border menggunakan properti border.
+- Padding adalah ruang di dalam elemen, antara konten dan border. Padding menambah ukuran elemen dan dapat diatur menggunakan properti padding.
+- Berikut adalah contoh cara mengimplementasikannya.
+
+```css
+.element {
+    margin: 20px;              
+    border: 2px solid black;   
+    padding: 15px;             
+}
+```
+
+```html
+<div class="element">
+    Ini adalah contoh elemen dengan margin, border, dan padding.
+</div>
+```
+
+#### Jelaskan konsep flex box dan grid layout beserta kegunaannya!
+
+- Flexbox adalah model layout CSS yang dirancang untuk menyediakan cara yang lebih efisien dalam mengatur dan mendistribusikan ruang di dalam kontainer, terutama ketika ukuran elemen tidak diketahui dan dapat berubah. Flexbox memungkinkan elemen anak dalam kontainer untuk disusun secara horizontal atau vertikal dengan mudah, memberikan kontrol atas aliran, perataan, dan ukuran.
+- Grid Layout adalah model layout dua dimensi yang memungkinkan penataan elemen dalam baris dan kolom. Dengan grid, kita dapat membuat tata letak kompleks dengan lebih mudah dan lebih terstruktur, dan juga dapat mengatur elemen dalam grid menggunakan baris dan kolom dengan properti seperti grid-template-columns dan grid-template-rows.
+- Kegunaan keduanya terletak pada kemudahan dalam menciptakan layout yang responsif dan dinamis. Flexbox lebih cocok untuk desain satu dimensi, sementara Grid lebih cocok untuk desain dua dimensi.
+
+#### Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
+
+1. Implementasikan fungsi untuk menghapus dan mengedit product.
+- Saya membuka file views.py dan menambahkan fungsi edit_product dan delete_product.
+- Pada fungsi edit_product, saya mengambil data produk berdasarkan ID yang diterima, kemudian membuat form untuk mengedit informasi produk tersebut. Setelah user mengisi form, saya menyimpan perubahan ke database.
+- Untuk fungsi delete_product, saya mengambil produk berdasarkan ID dan menghapusnya dari database. 
+
+2. Kustomisasi desain pada template HTML yang telah dibuat pada tugas-tugas sebelumnya menggunakan CSS atau CSS framework (seperti Bootstrap, Tailwind, Bulma) dengan ketentuan sebagai berikut:
+    * Kustomisasi halaman login, register, dan tambah product semenarik mungkin.
+        - Saya mengubah tampilan halaman login dan register dengan menambahkan elemen-elemen menarik menggunakan Tailwind, seperti warna latar belakang, padding, dan efek hover pada tombol.
+        - Saya memastikan bahwa form pada halaman tersebut mudah diakses dan responsif, dengan mengatur lebar maksimum dan margin yang sesuai.
+
+    * Kustomisasi halaman daftar product menjadi lebih menarik dan responsive.
+        - Saya mengubah tampilan halaman daftar produk agar lebih menarik dan responsif. Jika belum ada produk yang tersimpan, saya menampilkan gambar dan pesan bahwa belum ada produk yang terdaftar.
+        - Jika produk sudah ada, saya menggunakan card untuk menampilkan setiap produk dengan detailnya, termasuk nama, harga, deskripsi, fat content, quantity, dan rating.
+
+    * Untuk setiap card product, buatlah dua buah button untuk mengedit dan menghapus product pada card tersebut!
+        - Saya menambahkan dua tombol pada setiap card produk: satu untuk mengedit produk dan satu untuk menghapus produk. Tombol-tombol ini terhubung ke fungsi yang sesuai di views.py, sehingga pengguna bisa melakukan tindakan langsung dari halaman daftar produk.
+
+    * Buatlah navigation bar (navbar) untuk fitur-fitur pada aplikasi yang responsive terhadap perbedaan ukuran device, khususnya mobile dan desktop.
+        - Saya membuat file baru bernama navbar.html dan menambahkan elemen navbar yang responsif menggunakan tailwind. Navbar ini berisi tautan ke berbagai fitur aplikasi, seperti daftar produk, tambah produk, dan logout.
+        - Saya menyertakan navbar.html ke dalam semua template utama seperti main.html, create_product.html, dan edit_product.html menggunakan tag {% include 'navbar.html' %}, sehingga navbar terlihat konsisten.
+
 ## Tugas 4
 
 #### Apa perbedaan antara HttpResponseRedirect() dan redirect()
