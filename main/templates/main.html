@@ -3,6 +3,7 @@
 
 {% block meta %}
 <title>MyDairy</title>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
 {% endblock meta %}
 {% block content %}
 {% include 'navbar.html' %}
@@ -22,30 +23,228 @@
       </div>      
     </div>
     <div class="flex justify-end pr-9 mb-6">
-      <div class="relative h-[49px] px-4 py-3 bg-white rounded-md justify-center items-center gap-2.5 inline-flex overflow-hidden group">
+      <div class="relative h-[49px] px-2 py-3 bg-white rounded-md justify-center items-center gap-2.5 inline-flex overflow-hidden group">
         <div class="absolute inset-0 rounded-md border-4 transition-all duration-300" style="border-image: linear-gradient(135deg, #73daf1, #eb7acb) 1;">
         </div>
-        <a href="{% url 'main:create_product' %}" class="relative bg-gradient-to-r from-[#73daf1] to-[#eb7acb] bg-clip-text text-transparent text-xl font-bold font-sans z-10 transition-all duration-300 group-hover:bg-none group-hover:text-white">
-            Add Product
+        <a href="{% url 'main:create_product' %}" class="relative bg-gradient-to-r from-[#73daf1] to-[#eb7acb] bg-clip-text text-transparent text-xl font-bold font-sans z-10 transition-all duration-300 group-hover:bg-none group-hover:text-white px-4 py-2">
+          Add Product
         </a>
         <div class="absolute inset-0 bg-gradient-to-r from-[#73daf1] to-[#eb7acb] rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
       </div>
+      
+      <div class="relative ml-4 h-[49px]">
+        <div class="relative h-full px-2 py-3 bg-white rounded-md justify-center items-center gap-2.5 inline-flex overflow-hidden group">
+          <div class="absolute inset-0 rounded-md border-4 transition-all duration-300" style="border-image: linear-gradient(135deg, #73daf1, #eb7acb) 1;">
+          </div>
+          <button type="button" class="relative bg-gradient-to-r from-[#73daf1] to-[#eb7acb] bg-clip-text text-transparent text-xl font-bold font-sans z-10 transition-all duration-300 group-hover:bg-none group-hover:text-white px-4 py-2" data-modal-target="crudModal" data-modal-toggle="crudModal" onclick="showModal();">
+            Add New Product by AJAX
+          </button>
+          <div class="absolute inset-0 bg-gradient-to-r from-[#73daf1] to-[#eb7acb] rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        </div>
+      </div>
     </div>
     
-    {% if not products %}
-    <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
-        <img src="{% static 'image/sad.png' %}" alt="Sad face" class="w-32 h-32 mb-4"/>
-        <p class="text-center text-gray-600 mt-4">Belum ada data produk!</p>
+    <div id="product_cards"></div>
+    <!-- Modal structure -->
+    <div id="crudModal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 w-full flex items-center justify-center bg-gray-800 bg-opacity-50 overflow-x-hidden overflow-y-auto transition-opacity duration-300 ease-out">
+      <div id="crudModalContent" class="relative bg-white rounded-lg shadow-lg w-5/6 sm:w-3/4 md:w-1/2 lg:w-1/3 mx-4 sm:mx-0 transform scale-95 opacity-0 transition-transform transition-opacity duration-300 ease-out" style="max-height: 600px; overflow-y: auto;">
+          <!-- Modal header -->
+          <div class="flex items-center justify-between p-4 border-b rounded-t">
+              <h3 class="text-xl font-semibold text-gray-900">Add New Product</h3>
+              <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" id="closeModalBtn">
+                  <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                  </svg>
+                  <span class="sr-only">Close modal</span>
+              </button>
+          </div>
+          <!-- Modal body -->
+          <div class="px-6 py-4 space-y-6 form-style">
+              <form id="DairyEntryForm">
+                  <div class="mb-4">
+                      <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                      <input type="text" id="name" name="name" maxlength="255" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter product name" required>
+                  </div>
+                  <div class="mb-4">
+                      <label for="price" class="block text-sm font-medium text-gray-700">Price</label>
+                      <input type="number" id="price" name="price" min="0" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter product price" required>
+                  </div>
+                  <div class="mb-4">
+                      <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                      <textarea id="description" name="description" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter product description" required style="height: 150px; resize: vertical;"></textarea>
+                  </div>
+                  <div class="mb-4">
+                      <label for="fat_content" class="block text-sm font-medium text-gray-700">Fat Content</label>
+                      <input type="text" id="fat_content" name="fat_content" maxlength="50" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter product fat content" required>
+                  </div>
+                  <div class="mb-4">
+                      <label for="quantity" class="block text-sm font-medium text-gray-700">Quantity</label>
+                      <input type="number" id="quantity" name="quantity" min="0" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter product quantity" required>
+                  </div>
+                  <div class="mb-4">
+                      <label for="rating" class="block text-sm font-medium text-gray-700">Rating</label>
+                      <input type="number" step="0.01" min="0" max="9.99" id="rating" name="rating" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter product rating" required>
+                  </div>
+              </form>
+          </div>
+          <!-- Modal footer -->
+          <div class="flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2 p-6 border-t border-gray-200 rounded-b justify-center md:justify-end">
+              <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg" id="cancelButton">Cancel</button>
+              <button type="submit" id="submitProduct" form="DairyEntryForm" class="text-white font-bold py-2 px-4 rounded-lg" style="background-color: #37899C;" onmouseover="this.style.backgroundColor='#1F6272';" onmouseout="this.style.backgroundColor='#37899C';">
+                Submit
+            </button>
+            
+          </div>
+      </div>
     </div>
-    {% else %}
-    <div class="flex flex-wrap w-full"> 
-        {% for product in products %}
-            <div class="flex-shrink-0 w-full sm:w-1/2 lg:w-1/3"> 
-                {% include 'card_product.html' with product=product %}
-            </div>
-        {% endfor %}
-    </div>
-    {% endif %}
+
 
 </div>
+
+<script>
+  const modal = document.getElementById('crudModal');
+  const modalContent = document.getElementById('crudModalContent');
+
+  function showModal() {
+      const modal = document.getElementById('crudModal');
+      const modalContent = document.getElementById('crudModalContent');
+
+      modal.classList.remove('hidden'); 
+      setTimeout(() => {
+        modalContent.classList.remove('opacity-0', 'scale-95');
+        modalContent.classList.add('opacity-100', 'scale-100');
+      }, 50); 
+  }
+
+  function hideModal() {
+      const modal = document.getElementById('crudModal');
+      const modalContent = document.getElementById('crudModalContent');
+
+      modalContent.classList.remove('opacity-100', 'scale-100');
+      modalContent.classList.add('opacity-0', 'scale-95');
+
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 150); 
+  }
+
+  document.getElementById("cancelButton").addEventListener("click", hideModal);
+  document.getElementById("closeModalBtn").addEventListener("click", hideModal);
+
+  function addProduct() {
+    fetch("{% url 'main:add_product_ajax' %}", {
+      method: "POST",
+      body: new FormData(document.querySelector('#DairyEntryForm')),
+    })
+    .then(response => refreshProducts())
+
+    document.getElementById("DairyEntryForm").reset(); 
+    document.querySelector("[data-modal-toggle='crudModal']").click();
+
+    return false;
+  }
+
+  document.getElementById("DairyEntryForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    addProduct();
+  })
+
+  async function getProducts(){
+      return fetch("{% url 'main:show_json' %}").then((res) => res.json())
+  }
+  async function refreshProducts() {
+    document.getElementById("product_cards").innerHTML = "";
+    document.getElementById("product_cards").className = "";
+    const products = await getProducts();
+    let htmlString = "";
+    let classNameString = "";
+
+    if (products.length === 0) {
+        classNameString = "flex flex-col items-center justify-center min-h-[24rem] p-6";
+        htmlString = `
+            <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+                <img src="{% static 'image/sad.png' %}" alt="Sad face" class="w-32 h-32 mb-4"/>
+                <p class="text-center text-gray-600 mt-4">Belum ada data product pada MyDairy.</p>
+            </div>
+        `;
+    }
+    else {
+      classNameString = "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3";
+
+        products.forEach((item) => {
+            const name = DOMPurify.sanitize(item.fields.name);
+            const price = DOMPurify.sanitize(item.fields.price);
+            const description = DOMPurify.sanitize(item.fields.description);
+            const fat_content = DOMPurify.sanitize(item.fields.fat_content);
+            const quantity = DOMPurify.sanitize(item.fields.quantity);
+            const rating = DOMPurify.sanitize(item.fields.rating);
+            htmlString += `
+            <div class="px-[40px]">
+              <div class="w-[380px] h-auto flex-col justify-start items-end inline-flex"> 
+                  <div class="self-stretch pb-6 bg-gradient-to-l from-[#ffd3f2] to-[#cef6ff] rounded-3xl border border-[#dedede] flex-col justify-start items-start gap-6 flex">
+                      <div class="self-stretch p-6 bg-white rounded-tl-3xl rounded-tr-3xl border border-[#dedede] justify-start items-center inline-flex">
+                          <div class="grow shrink basis-0 text-[#4ab2c9] text-2xl font-bold font-sans">
+                            ${item.fields.name}
+                          </div>
+                          <div class="px-6 py-2.5 bg-gradient-to-r from-[#73daf1] to-[#eb7acb] rounded-[40px] justify-center items-center gap-2.5 flex">
+                              <div class="text-white text-xl font-bold font-sans">
+                                ${item.fields.price}
+                              </div>
+                          </div>
+                      </div>
+                      <div class="self-stretch grow shrink basis-0 px-6 justify-start items-start gap-2.5 inline-flex">
+                          <div class="grow shrink basis-0 text-black text-xl font-normal font-sans">
+                            ${item.fields.description}
+                          </div>
+                      </div>
+                      <div class="self-stretch h-auto px-6 flex-col justify-start items-start gap-2 flex">
+                          <div class="justify-start items-center gap-2 inline-flex">
+                              <div class="w-6 h-6 relative">
+                                  <img src="{% static 'image/fat.svg' %}" class="w-6 h-6" alt="Fat Icon"/>
+                              </div>
+                              <div class="text-black text-xl font-normal font-sans">
+                                  Fat - ${item.fields.fat_content}
+                              </div>
+                          </div>
+                          <div class="justify-start items-center gap-2 inline-flex">
+                              <div class="w-6 h-6 relative">
+                                  <img src="{% static 'image/information.svg' %}" class="w-6 h-6" alt="Quantity Icon"/>
+                              </div>
+                              <div class="text-black text-xl font-normal font-sans">
+                                  Quantity - ${item.fields.quantity}
+                              </div>
+                          </div>
+                          <div class="self-stretch justify-start items-center gap-2 inline-flex">
+                              <div class="w-6 h-6 relative">
+                                  <img src="{% static 'image/star.svg' %}" class="w-6 h-6" alt="Rating Icon"/>
+                              </div>
+                              <div class="text-black text-xl font-normal font-sans">
+                                  Rating - ${item.fields.rating}
+                              </div>
+                          </div>
+                          <div class="w-full"></div> 
+                      </div>
+                  </div>
+                  <div class="h-[65.50px] px-6 justify-end items-center gap-3 inline-flex">
+                      <div class="w-[64.50px] h-[65.50px] relative">
+                          <a href="/edit-product/${item.pk}" class="group">
+                              <img src="{% static 'image/edit.svg' %}" class="w-20 h-20 top-[-50px] absolute transition-transform duration-300 ease-in-out group-hover:scale-110" />
+                          </a>
+                      </div>
+                      <div class="w-[64.50px] h-[65.50px] relative">
+                          <a href="/delete-product/${item.pk}" class="group">
+                              <img src="{% static 'image/delete.svg' %}" class="w-20 h-20 top-[-50px] absolute transition-transform duration-300 ease-in-out group-hover:scale-110" />
+                          </a>
+                      </div>            
+                  </div>       
+              </div>
+          </div>
+            `;
+        });
+    }
+    document.getElementById("product_cards").className = classNameString;
+    document.getElementById("product_cards").innerHTML = htmlString;
+}
+refreshProducts();
+</script>
 {% endblock content %}

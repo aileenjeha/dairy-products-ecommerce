@@ -1,5 +1,32 @@
 - Link Aplikasi PWS : https://aileen-josephine-dairyproductsecommerce.pbp.cs.ui.ac.id 
 
+## Tugas 6
+
+#### Jelaskan manfaat dari penggunaan JavaScript dalam pengembangan aplikasi web!
+JavaScript adalah bahasa pemrograman yang sangat penting dalam pengembangan aplikasi web karena memungkinkan interaktivitas dan dinamisasi halaman web. Dengan JavaScript, developer dapat membuat elemen-elemen seperti form validasi, animation, dan konten yang dapat diperbarui tanpa perlu memuat ulang seluruh halaman. Hal ini meningkatkan user experience, menjadikannya lebih responsif dan menarik. Selain itu, JavaScript juga berfungsi dalam pengembangan aplikasi berbasis client-side, di mana logika dan pemrosesan dapat dilakukan langsung di browser, mengurangi beban server.
+
+#### Jelaskan fungsi dari penggunaan await ketika kita menggunakan fetch()! Apa yang akan terjadi jika kita tidak menggunakan await?
+Penggunaan await dalam konteks fetch() berfungsi untuk menunggu hasil dari operasi asynchronous sebelum melanjutkan eksekusi kode berikutnya. Ketika kita melakukan permintaan HTTP menggunakan fetch(), responsnya mungkin belum tersedia secara instan, dan await memastikan bahwa kita hanya melanjutkan eksekusi kode setelah respons diterima. Jika kita tidak menggunakan await, eksekusi kode akan melanjutkan ke pernyataan berikutnya tanpa menunggu respons, yang dapat menyebabkan error atau hasil yang tidak diinginkan, seperti mencoba mengakses data yang belum tersedia.
+
+#### Mengapa kita perlu menggunakan decorator csrf_exempt pada view yang akan digunakan untuk AJAX POST?
+Decorator csrf_exempt digunakan untuk menonaktifkan perlindungan CSRF (Cross-Site Request Forgery) pada view tertentu yang diakses melalui AJAX POST. CSRF adalah jenis serangan di mana penyerang mencoba untuk mengirim permintaan yang tidak sah atas nama pengguna yang terautentikasi. Dalam konteks AJAX, jika kita tidak mengecualikan view dari perlindungan CSRF, permintaan POST mungkin akan ditolak oleh server karena tidak menyertakan token CSRF yang valid. Dengan menggunakan decorator ini, kita memastikan bahwa view tersebut dapat diakses dengan mudah oleh permintaan AJAX, tanpa harus menangani token CSRF secara manual.
+
+#### Pada tutorial PBP minggu ini, pembersihan data input pengguna dilakukan di belakang (backend) juga. Mengapa hal tersebut tidak dilakukan di frontend saja?
+Pembersihan data input pengguna di backend adalah langkah penting untuk memastikan keamanan dan integritas aplikasi. Meskipun pembersihan bisa dilakukan di frontend untuk meningkatkan pengalaman pengguna, melakukan pembersihan di backend adalah cara yang lebih aman karena data yang diterima dari frontend dapat dimanipulasi oleh pengguna. Dengan melakukan validasi dan pembersihan di backend, kita dapat memastikan bahwa semua data yang masuk ke sistem telah diperiksa dan diolah sesuai dengan kebijakan keamanan aplikasi. Hal ini juga mencegah potensi serangan seperti SQL injection dan XSS (Cross-Site Scripting) yang dapat terjadi jika data yang tidak bersih diproses langsung.
+
+#### Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
+
+AJAX GET & AJAX POST
+1. Saya menambahkan kedua impor berikut pada file views.py: csrf_exempt dan require_POST.
+2. Saya membuat fungsi baru pada views.py dengan nama add_product_ajax yang menerima parameter request.
+3. Saya menambahkan routing untuk fungsi add_product_ajax.
+4. Saya menampilkan data produk dengan menggunakan fetch() API. Saya membuka berkas views.py dan mengubah baris pertama views untuk show_json dan show_xml seperti berikut: data = Product.objects.filter(user=request.user).
+5. Saya membuat block script di bagian bawah berkas dan membuat fungsi baru pada block script tersebut dengan nama getProducts dan refreshProducts yang digunakan untuk me-refresh data produk secara asinkronus.
+6. Saya membuat modal sebagai form untuk menambahkan produk, mengimplementasikan modal (Tailwind) pada aplikasi saya, menambahkan fungsi showModal, hideModal, dan menambahkan tombol baru untuk melakukan penambahan data dengan AJAX.
+7. Saya menambahkan data produk dengan AJAX dengan membuat fungsi addProduct. Saya menambahkan sebuah event listener pada form yang ada di modal untuk menjalankan fungsi addProduct().
+8. Pada fungsi add_product_ajax di views.py, saya menggunakan fungsi strip_tags pada data fields yang ada sebelum data tersebut dimasukkan ke dalam Product. Pada class DairyEntryForm di forms.py, saya menambahkan method clean.
+9. Saya membersihkan data dengan DOMPurify.
+
 ## Tugas 5
 
 #### Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut!
