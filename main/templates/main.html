@@ -132,14 +132,30 @@
   document.getElementById("closeModalBtn").addEventListener("click", hideModal);
 
   function addProduct() {
-    fetch("{% url 'main:add_product_ajax' %}", {
-      method: "POST",
-      body: new FormData(document.querySelector('#DairyEntryForm')),
-    })
-    .then(response => refreshProducts())
+    const form = document.getElementById("DairyEntryForm");
+    const formData = new FormData(form);
+    let isXSSDetected = false;
 
-    document.getElementById("DairyEntryForm").reset(); 
-    document.querySelector("[data-modal-toggle='crudModal']").click();
+    for (let [key, value] of formData.entries()) {
+      const sanitizedValue = DOMPurify.sanitize(value);
+
+      if (value !== sanitizedValue) {
+        isXSSDetected = true;
+        alert(`Error: Potential XSS detected in the "${key}" field. Please modify your input.`);
+        break;
+      }
+    }
+
+    if (!isXSSDetected) {
+      fetch("{% url 'main:add_product_ajax' %}", {
+        method: "POST",
+        body: formData
+      })
+      .then(response => refreshProducts());
+
+      form.reset();
+      hideModal();
+    }
 
     return false;
   }
